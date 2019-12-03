@@ -1,25 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from '@apollo/react-hooks';
+import RenderDashboard from './Dashboard';
+import Universe from "./Universe";
+
+const client = new ApolloClient({
+  uri: 'https://seniorprojectu.herokuapp.com/graphql'
+});
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ApolloProvider client={client}>
+      <div className="d-flex" id="wrapper">
+        <div id="page-content-wrapper">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-12" style={{height: '500px'}}>
+                {Universe.map(function(ticker) {
+                  return <RenderDashboard key={ticker.ticker} ticker={ticker.ticker}/>
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </ApolloProvider>
   );
 }
 
